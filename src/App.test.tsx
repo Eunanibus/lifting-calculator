@@ -101,4 +101,14 @@ describe("App", () => {
     );
     expect(screen.getByRole("button", { name: "Clear bar" })).toBeEnabled();
   });
+
+  it('is dark by default and applies a theme change to the document', () => {
+    render(<App />);
+    expect(document.documentElement.dataset.theme).toBe('dark');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
+    expect(document.documentElement.dataset.theme).toBe('light');
+    expect(JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? '{}')).toMatchObject({ theme: 'light' });
+  });
 });

@@ -14,6 +14,11 @@ const ROUNDINGS = [
   { value: "under", label: "Closest under" },
 ] as const;
 
+const THEMES = [
+  { value: 'dark', label: 'Dark' },
+  { value: 'light', label: 'Light' },
+] as const;
+
 export default function SettingsDialog({
   open,
   settings,
@@ -106,6 +111,24 @@ export default function SettingsDialog({
                 <span>
                   {bar.name} <small>{bar.lbs} lb</small>
                 </span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset className="setting setting-stacked">
+          <legend className="setting-label">Theme</legend>
+          <div className="segmented">
+            {THEMES.map(({ value, label }) => (
+              <label key={value} className="segment">
+                <input
+                  type="radio"
+                  name="theme"
+                  value={value}
+                  checked={settings.theme === value}
+                  onChange={() => update({ theme: value })}
+                />
+                <span>{label}</span>
               </label>
             ))}
           </div>

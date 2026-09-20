@@ -54,6 +54,8 @@ describe("SettingsDialog", () => {
     expect(
       screen.getByRole("radio", { name: "Curl bar 25 lb" }),
     ).not.toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Dark' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Light' })).not.toBeChecked();
   });
 
   it("reports each change as a whole settings object", () => {
@@ -84,6 +86,9 @@ describe("SettingsDialog", () => {
       ...DEFAULT_SETTINGS,
       bar: "curl",
     });
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
+    expect(onChange).toHaveBeenLastCalledWith({ ...DEFAULT_SETTINGS, theme: 'light' });
   });
 
   it("closes on Done, on a backdrop click and on the native close event", () => {

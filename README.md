@@ -10,6 +10,7 @@ Open the cog in the top right.
 - Include bar weight: on by default. The bar's own weight counts toward the target, so the total shown is bar plus plates.
 - Round to: closest over (default) or closest under, using the plates in the gym.
 - Bar: barbell (45 lb) or curl bar (25 lb).
+- Theme: dark (default) or light.
 
 Settings are remembered on the device between visits until you change them. Clear bar clears the number and the bar but keeps the settings.
 

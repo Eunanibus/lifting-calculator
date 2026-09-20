@@ -20,11 +20,7 @@ function memoryStorage(initial: Record<string, string> = {}) {
 
 describe("settings", () => {
   it("defaults to bar included, closest over, barbell", () => {
-    expect(DEFAULT_SETTINGS).toEqual({
-      includeBar: true,
-      rounding: "over",
-      bar: "barbell",
-    });
+    expect(DEFAULT_SETTINGS).toEqual({ includeBar: true, rounding: 'over', bar: 'barbell', theme: 'dark' });
   });
 
   it("returns defaults when nothing is stored", () => {
@@ -33,11 +29,7 @@ describe("settings", () => {
 
   it("round-trips through storage", () => {
     const storage = memoryStorage();
-    const saved: Settings = {
-      includeBar: false,
-      rounding: "under",
-      bar: "curl",
-    };
+    const saved: Settings = { includeBar: false, rounding: 'under', bar: 'curl', theme: 'light' };
     saveSettings(saved, storage);
     expect(storage.data.get(SETTINGS_KEY)).toBe(JSON.stringify(saved));
     expect(loadSettings(storage)).toEqual(saved);
@@ -49,16 +41,13 @@ describe("settings", () => {
     ).toEqual(DEFAULT_SETTINGS);
   });
 
-  it("falls back field by field on wrong types", () => {
-    const stored = JSON.stringify({
-      includeBar: "yes",
-      rounding: "sideways",
-      bar: "curl",
-    });
+  it('falls back field by field on wrong types', () => {
+    const stored = JSON.stringify({ includeBar: 'yes', rounding: 'sideways', bar: 'curl', theme: 'sepia' });
     expect(loadSettings(memoryStorage({ [SETTINGS_KEY]: stored }))).toEqual({
       includeBar: true,
-      rounding: "over",
-      bar: "curl",
+      rounding: 'over',
+      bar: 'curl',
+      theme: 'dark',
     });
   });
 
@@ -76,7 +65,7 @@ describe("settings", () => {
   });
 
   it("uses window.localStorage by default", () => {
-    saveSettings({ includeBar: true, rounding: "under", bar: "barbell" });
+    saveSettings({ includeBar: true, rounding: "under", bar: "barbell", theme: 'dark' });
     expect(
       JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? "{}"),
     ).toMatchObject({ rounding: "under" });

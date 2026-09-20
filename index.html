@@ -3,10 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#1e63d0" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="theme-color" content="#0f1115" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <title>Serg to Eunan calculator</title>
+    <script>
+      // The stylesheet is dark by default. A saved light theme is applied here,
+      // before React mounts, so the page never flashes dark for a light user.
+      // The storage key matches SETTINGS_KEY in src/lib/settings.ts.
+      try {
+        var saved = JSON.parse(localStorage.getItem('serg-to-eunan.settings') || '{}');
+        if (saved.theme === 'light') document.documentElement.dataset.theme = 'light';
+      } catch (error) {
+        // A blocked store means the default theme, which is fine.
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

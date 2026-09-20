@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Barbell from "./components/Barbell";
 import Hero from "./components/Hero";
 import Result, { ResultSkeleton } from "./components/Result";
@@ -36,6 +36,10 @@ export default function App() {
   const { status, result } = useLoadResult(input, settings);
   const bar = barById(settings.bar);
   const invalid = input.trim() !== "" && parseKg(input) === null;
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = settings.theme;
+  }, [settings.theme]);
 
   const updateSettings = (next: Settings) => {
     setSettings(next);
