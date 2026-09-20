@@ -18,7 +18,7 @@ export default function Result({ result }: ResultProps) {
   } = result;
 
   const breakdown = includeBar
-    ? `${bar.name} ${bar.lbs} lb + ${formatWeight(plateLbs)} lb of plates`
+    ? `${bar.name} ${formatWeight(bar.lbs)} lb + ${formatWeight(plateLbs)} lb of plates`
     : `${formatWeight(plateLbs)} lb of plates, bar not counted`;
 
   return (
