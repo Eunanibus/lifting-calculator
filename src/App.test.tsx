@@ -22,7 +22,7 @@ describe("App", () => {
   it("shows the title, the sentence and an empty bar", () => {
     render(<App />);
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      "Serg to Eunan calculator",
+      "Lifting calculator",
     );
     expect(
       screen.getByRole("textbox", { name: /I want Eunan to lift/ }),
