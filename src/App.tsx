@@ -59,7 +59,7 @@ export default function App() {
   return (
     <main className="page">
       <header className="header">
-        <h1 className="title">Serg to Eunan calculator</h1>
+        <h1 className="visually-hidden">Lifting calculator</h1>
         <button
           type="button"
           className="icon-button"

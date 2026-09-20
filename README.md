@@ -1,4 +1,4 @@
-# Serg to Eunan calculator
+# Lifting calculator
 
 Turns a kilogram lifting target into the pound plates to load on the bar.
 Type the kilograms your coach programmed, and the page draws the bar with the exact plates, shows the loaded weight in pounds and kilograms, and lists the plates per side.
