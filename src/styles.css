@@ -181,12 +181,16 @@ input {
 
 /* Barbell */
 
+/* The bar breaks out of the text column so it can span most of the page. */
 .barbell {
   display: block;
-  width: 100%;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100vw - 2rem, 56rem);
   height: auto;
-  max-height: 38vh;
-  margin: 0 auto;
+  max-height: 42vh;
+  margin: 0;
   overflow: visible;
 }
 
