@@ -39,6 +39,9 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.dataset.theme = settings.theme;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', settings.theme === 'dark' ? '#0f1115' : '#f6f7f9');
   }, [settings.theme]);
 
   const updateSettings = (next: Settings) => {
@@ -76,8 +79,10 @@ export default function App() {
 
       <Barbell bar={bar} perSide={result?.perSide ?? []} status={status} />
 
-      {status === "calculating" && <ResultSkeleton />}
-      {status === "ready" && result && <Result result={result} />}
+      <div className="result-slot" aria-live="polite" aria-busy={status === 'calculating'} data-testid="result-slot">
+        {status === "calculating" && <ResultSkeleton />}
+        {status === "ready" && result && <Result result={result} />}
+      </div>
 
       <div className="actions">
         <button

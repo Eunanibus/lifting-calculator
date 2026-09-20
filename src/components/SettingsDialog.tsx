@@ -63,14 +63,12 @@ export default function SettingsDialog({
         </h2>
 
         <div className="setting">
-          <span className="setting-label" id="include-bar-label">
-            Include bar weight
-          </span>
+          <label className="setting-label" htmlFor="include-bar">Include bar weight</label>
           <button
             type="button"
             role="switch"
             aria-checked={settings.includeBar}
-            aria-labelledby="include-bar-label"
+            id="include-bar"
             className="switch"
             onClick={() => update({ includeBar: !settings.includeBar })}
           >

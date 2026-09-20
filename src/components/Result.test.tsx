@@ -82,26 +82,11 @@ describe("Result", () => {
     expect(screen.queryByRole("list")).not.toBeInTheDocument();
   });
 
-  it("announces updates politely", () => {
-    render(
-      <Result
-        result={solve(100, {
-          includeBar: true,
-          rounding: "over",
-          bar: "barbell",
-        })}
-      />,
-    );
-    expect(document.querySelector('[aria-live="polite"]')).not.toBeNull();
-  });
 });
 
 describe("ResultSkeleton", () => {
-  it("is marked busy", () => {
+  it('is labelled for assistive tech', () => {
     render(<ResultSkeleton />);
-    expect(screen.getByLabelText("Calculating")).toHaveAttribute(
-      "aria-busy",
-      "true",
-    );
+    expect(screen.getByLabelText('Calculating')).toHaveClass('result-skeleton');
   });
 });

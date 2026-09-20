@@ -75,6 +75,9 @@ describe("SettingsDialog", () => {
       includeBar: false,
     });
 
+    fireEvent.click(screen.getByText('Include bar weight'));
+    expect(onChange).toHaveBeenLastCalledWith({ ...DEFAULT_SETTINGS, includeBar: false });
+
     fireEvent.click(screen.getByRole("radio", { name: "Closest under" }));
     expect(onChange).toHaveBeenLastCalledWith({
       ...DEFAULT_SETTINGS,

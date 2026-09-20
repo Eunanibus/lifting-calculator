@@ -22,7 +22,7 @@ export default function Result({ result }: ResultProps) {
     : `${formatWeight(plateLbs)} lb of plates, bar not counted`;
 
   return (
-    <section className="result" aria-live="polite">
+    <section className="result">
       <p className="result-total">
         <span className="result-lbs">{formatWeight(totalLbs)}</span>{" "}
         <span className="result-unit">lb</span>{" "}
@@ -68,7 +68,6 @@ export function ResultSkeleton() {
   return (
     <section
       className="result result-skeleton"
-      aria-busy="true"
       aria-label="Calculating"
     >
       <div className="skeleton skeleton-total" />

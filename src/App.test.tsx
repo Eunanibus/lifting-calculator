@@ -102,6 +102,20 @@ describe("App", () => {
     expect(screen.getByRole("button", { name: "Clear bar" })).toBeEnabled();
   });
 
+  it('keeps one live region across calculating and ready', () => {
+    render(<App />);
+    const slot = screen.getByTestId('result-slot');
+    expect(slot).toHaveAttribute('aria-live', 'polite');
+    expect(slot).toHaveAttribute('aria-busy', 'false');
+
+    fireEvent.change(screen.getByRole('textbox'), { target: { value: '100' } });
+    expect(slot).toHaveAttribute('aria-busy', 'true');
+    settle();
+    expect(screen.getByTestId('result-slot')).toBe(slot);
+    expect(slot).toHaveAttribute('aria-busy', 'false');
+    expect(slot).toHaveTextContent('225');
+  });
+
   it('is dark by default and applies a theme change to the document', () => {
     render(<App />);
     expect(document.documentElement.dataset.theme).toBe('dark');

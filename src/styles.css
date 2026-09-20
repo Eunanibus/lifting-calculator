@@ -224,7 +224,7 @@ input {
 }
 
 .plate-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.02em;
   pointer-events: none;
@@ -370,6 +370,11 @@ input {
   padding: 0;
   border: none;
   min-inline-size: 0;
+  min-height: 44px;
+}
+
+label.setting-label {
+  cursor: pointer;
 }
 
 .setting-stacked {

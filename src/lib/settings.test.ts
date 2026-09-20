@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import indexHtml from '../../index.html?raw';
 import {
   DEFAULT_SETTINGS,
   SETTINGS_KEY,
@@ -70,5 +71,9 @@ describe("settings", () => {
       JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? "{}"),
     ).toMatchObject({ rounding: "under" });
     expect(loadSettings().rounding).toBe("under");
+  });
+
+  it('is the key the pre-mount script in index.html reads', () => {
+    expect(indexHtml).toContain(`'${SETTINGS_KEY}'`);
   });
 });
