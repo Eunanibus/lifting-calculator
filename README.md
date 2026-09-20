@@ -35,13 +35,13 @@ Every push to `main` builds and deploys to GitHub Pages through `.github/workflo
 
 One-time setup:
 
-1. Create the `Eunanibus/serg-to-eunan` repository on GitHub, empty.
+1. Create the `Eunanibus/lifting-calculator` repository on GitHub.
 2. In the repository settings, under Pages, set the source to GitHub Actions.
 3. Push:
 
    ```bash
-   git remote add origin git@github.com:Eunanibus/serg-to-eunan.git
+   git remote add origin git@github.com:Eunanibus/lifting-calculator.git
    git push -u origin main
    ```
 
-The site is then served at `https://eunanibus.github.io/serg-to-eunan/`.
+The site is then served at `https://eunanibus.github.io/lifting-calculator/`.
