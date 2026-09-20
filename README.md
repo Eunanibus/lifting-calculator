@@ -36,8 +36,9 @@ Every push to `main` builds and deploys to GitHub Pages through `.github/workflo
 One-time setup:
 
 1. Create the `Eunanibus/lifting-calculator` repository on GitHub.
-2. In the repository settings, under Pages, set the source to GitHub Actions.
-3. Push:
+2. Push; the first workflow run enables Pages with the GitHub Actions source.
+   If that run fails at the configure-pages step, set the Pages source to GitHub Actions in the repository settings and re-run it.
+3. To push from a fresh clone:
 
    ```bash
    git remote add origin git@github.com:Eunanibus/lifting-calculator.git
