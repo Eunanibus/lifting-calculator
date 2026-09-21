@@ -26,9 +26,9 @@ describe("units", () => {
   });
 
   it("describes how far a total landed from the target", () => {
-    expect(describeDelta(4.538)).toBe("4.5 lb over target");
-    expect(describeDelta(-5.462)).toBe("5.5 lb under target");
-    expect(describeDelta(0.01)).toBe("exactly on target");
-    expect(describeDelta(-0.04)).toBe("exactly on target");
+    expect(describeDelta(4.538)).toEqual({ value: "+4.5 lb", label: "over target" });
+    expect(describeDelta(-5.462)).toEqual({ value: "-5.5 lb", label: "under target" });
+    expect(describeDelta(0.01)).toEqual({ value: "Exact", label: "on target" });
+    expect(describeDelta(-0.04)).toEqual({ value: "Exact", label: "on target" });
   });
 });

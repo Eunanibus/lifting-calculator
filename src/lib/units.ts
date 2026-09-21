@@ -14,11 +14,14 @@ export function formatWeight(value: number): string {
   return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
 }
 
-/** Reads the signed difference between a loaded total and the target. */
-export function describeDelta(deltaLbs: number): string {
+export type DeltaDescription = { value: string; label: string };
+
+/** Splits the signed difference between a loaded total and the target into a short value and its label. */
+export function describeDelta(deltaLbs: number): DeltaDescription {
   if (Math.abs(deltaLbs) < 0.05) {
-    return "exactly on target";
+    return { value: 'Exact', label: 'on target' };
   }
-  const direction = deltaLbs > 0 ? "over" : "under";
-  return `${formatWeight(Math.abs(deltaLbs))} lb ${direction} target`;
+  const sign = deltaLbs > 0 ? '+' : '-';
+  const direction = deltaLbs > 0 ? 'over' : 'under';
+  return { value: `${sign}${formatWeight(Math.abs(deltaLbs))} lb`, label: `${direction} target` };
 }
