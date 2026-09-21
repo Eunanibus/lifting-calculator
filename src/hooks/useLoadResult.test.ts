@@ -106,7 +106,7 @@ describe("useLoadResult", () => {
     act(() => {
       vi.advanceTimersByTime(RESULT_DELAY_MS);
     });
-    expect(result.current.result?.totalLbs).toBe(215);
+    expect(result.current.result?.totalLbs).toBe(220);
   });
 
   it("returns to empty when the input becomes invalid", () => {

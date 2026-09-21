@@ -24,22 +24,27 @@ describe('Result', () => {
   it('lists each plate with a swatch and the count per side', () => {
     render(<Result result={solve(100, { includeBar: true, rounding: 'under', bar: 'barbell' })} />);
     const rows = screen.getAllByRole('listitem');
-    expect(rows.map((row) => row.textContent)).toEqual(['45 lb× 1 per side', '25 lb× 1 per side', '15 lb× 1 per side']);
+    expect(rows.map((row) => row.textContent)).toEqual([
+      '45 lb× 1 per side',
+      '35 lb× 1 per side',
+      '5 lb× 1 per side',
+      '2.5 lb× 1 per side',
+    ]);
     expect(within(rows[0] as HTMLElement).getByTestId('swatch')).toHaveClass('plate-blue');
 
     const deltaBadge = within(screen.getByTestId('delta-badge'));
     expect(deltaBadge.getByText('Closest under')).toBeInTheDocument();
-    expect(deltaBadge.getByText('-5.5 lb')).toBeInTheDocument();
+    expect(deltaBadge.getByText('-0.5 lb')).toBeInTheDocument();
     expect(deltaBadge.getByText('under target')).toBeInTheDocument();
   });
 
   it('says when the bar is not counted', () => {
     render(<Result result={solve(100, { includeBar: false, rounding: 'over', bar: 'barbell' })} />);
-    expect(screen.getByText('230')).toBeInTheDocument();
+    expect(screen.getByText('225')).toBeInTheDocument();
     const barBadge = within(screen.getByTestId('bar-badge'));
     expect(barBadge.getByText('Bar')).toBeInTheDocument();
     expect(barBadge.getByText('not counted')).toBeInTheDocument();
-    expect(barBadge.getByText('230 lb plates')).toBeInTheDocument();
+    expect(barBadge.getByText('225 lb plates')).toBeInTheDocument();
   });
 
   it('explains a bar that outweighs the target', () => {

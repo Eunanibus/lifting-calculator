@@ -73,7 +73,7 @@ describe("App", () => {
     fireEvent.click(screen.getByRole("button", { name: "Done" }));
     settle();
 
-    expect(screen.getByText("215")).toBeInTheDocument();
+    expect(screen.getByText("220")).toBeInTheDocument();
     expect(
       JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? "{}"),
     ).toMatchObject({ rounding: "under" });

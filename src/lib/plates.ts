@@ -29,13 +29,19 @@ export type LoadResult = {
   barExceedsTarget: boolean;
 };
 
-/** The gym's plates, heaviest first. Colours match the physical plates. */
+/**
+ * The gym's plates, heaviest first. Colours match the physical plates, so
+ * `name` repeats across weights (the 45 and 5 are both blue, the 25 and 2.5
+ * both green); it styles the swatch and is never used as an identifier.
+ */
 export const PLATES: readonly Plate[] = [
   { lbs: 45, color: "#1e63d0", name: "blue" },
   { lbs: 35, color: "#f2c00c", name: "yellow" },
   { lbs: 25, color: "#2e9e4f", name: "green" },
   { lbs: 15, color: "#1c1c1e", name: "black" },
   { lbs: 10, color: "#f4f4f2", name: "white" },
+  { lbs: 5, color: "#1e63d0", name: "blue" },
+  { lbs: 2.5, color: "#2e9e4f", name: "green" },
 ];
 
 export const BARS: readonly Bar[] = [

@@ -13,6 +13,8 @@ const PLATE_SIZES: Record<number, PlateSize> = {
   25: { width: 20, height: 150 },
   15: { width: 16, height: 125 },
   10: { width: 14, height: 110 },
+  5: { width: 12, height: 95 },
+  2.5: { width: 10, height: 80 },
 };
 const FALLBACK_SIZE: PlateSize = { width: 14, height: 100 };
 

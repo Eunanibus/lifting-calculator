@@ -18,7 +18,7 @@ Clear bar clears the number and the bar but keeps the settings.
 
 ## Plates
 
-The gym has 45 lb (blue), 35 lb (yellow), 25 lb (green), 15 lb (black) and 10 lb (white) plates.
+The gym has 45 lb (blue), 35 lb (yellow), 25 lb (green), 15 lb (black), 10 lb (white), 5 lb (blue) and 2.5 lb (green) plates.
 The inventory lives in `src/lib/plates.ts`; adding a plate is one line there.
 
 ## Development
