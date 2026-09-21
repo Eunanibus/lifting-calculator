@@ -290,7 +290,17 @@ input {
 .badge-value {
   font-size: 1.15rem;
   font-weight: 700;
+}
+
+.badge-lb,
+.badge-kg {
   white-space: nowrap;
+}
+
+/* Kilograms in the same blue as the input, so the coach's unit stands out. */
+.badge-kg {
+  color: var(--accent);
+  font-size: 0.85em;
 }
 
 .badge-sub {

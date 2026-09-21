@@ -13,7 +13,16 @@ export default function Result({ result }: ResultProps) {
       <div className="result-row">
         <div className="badge" data-testid="bar-badge">
           <span className="badge-title">{includeBar ? bar.name : 'Bar'}</span>
-          <span className="badge-value">{includeBar ? `${formatWeight(bar.lbs)} lb` : 'not counted'}</span>
+          <span className="badge-value">
+            {includeBar ? (
+              <>
+                <span className="badge-lb">{formatWeight(bar.lbs)} lb</span>{' '}
+                <span className="badge-kg">({formatWeight(lbsToKg(bar.lbs))} kg)</span>
+              </>
+            ) : (
+              'not counted'
+            )}
+          </span>
           <span className="badge-sub">{formatWeight(plateLbs)} lb plates</span>
         </div>
         <p className="result-total">
@@ -22,7 +31,15 @@ export default function Result({ result }: ResultProps) {
         </p>
         <div className="badge" data-testid="delta-badge">
           <span className="badge-title">Closest {rounding}</span>
-          <span className="badge-value">{delta.value}</span>
+          <span className="badge-value">
+            <span className="badge-lb">{delta.value}</span>
+            {delta.kg && (
+              <>
+                {' '}
+                <span className="badge-kg">({delta.kg})</span>
+              </>
+            )}
+          </span>
           <span className="badge-sub">{delta.label}</span>
         </div>
       </div>
