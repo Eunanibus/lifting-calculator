@@ -110,6 +110,9 @@ describe("Barbell", () => {
     expect(sideLbs("left")).toEqual([]);
     expect(screen.getAllByTestId("plate")).toHaveLength(3);
     expect(screen.getByRole("img")).toHaveAccessibleName("Slinger plate with 2 × 45 lb, 1 × 25 lb");
+    const [, , width, height] = (screen.getByTestId("barbell").getAttribute("viewBox") ?? "").split(" ").map(Number);
+    expect(height).toBeGreaterThan(width ?? 0);
+    expect(document.querySelector("g[transform*='rotate(-90)']")).not.toBeNull();
   });
 
   it("widens the drawing when the load outgrows the sleeve", () => {

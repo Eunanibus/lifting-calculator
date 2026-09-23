@@ -56,7 +56,7 @@ describe('Result', () => {
     expect(screen.getByText('110')).toBeInTheDocument();
     const barBadge = within(screen.getByTestId('bar-badge'));
     expect(barBadge.getByText('Slinger plate')).toBeInTheDocument();
-    expect(barBadge.getByText('single stack')).toBeInTheDocument();
+    expect(barBadge.getByText('Stacked')).toBeInTheDocument();
     expect(barBadge.getByText('110 lb plates')).toBeInTheDocument();
     const rows = screen.getAllByRole('listitem');
     expect(rows.map((row) => row.textContent)).toEqual(['45 lb× 2', '15 lb× 1', '5 lb× 1']);

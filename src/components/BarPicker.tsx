@@ -18,7 +18,7 @@ export default function BarPicker({ value, onChange }: BarPickerProps) {
               onChange={() => onChange(bar.id)}
             />
             <span>
-              {bar.name} <small>{bar.stacks === 2 ? `${bar.lbs} lb` : 'single stack'}</small>
+              {bar.name} <small>{bar.stacks === 2 ? `${bar.lbs} lb` : 'Stacked'}</small>
             </span>
           </label>
         ))}

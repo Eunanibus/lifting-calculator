@@ -29,9 +29,16 @@ const PLATE_GAP = 2;
 const SLEEVE_MARGIN = 16;
 const SHAFT_LENGTH: Record<Bar['id'], number> = { barbell: 300, curl: 220, slinger: 0 };
 
-/** The bracket a single-stack attachment hangs from, drawn left of its collar. */
+/**
+ * The base of a single-stack pin. The pin is laid out horizontally like a bar
+ * (base, collar, sleeve, plates outward) and the whole drawing is turned a
+ * quarter turn so the base sits at the bottom and the plates stack upward.
+ */
 const HANGER_WIDTH = 34;
 const HANGER_HEIGHT = 64;
+
+/** Minimum pin length, longer than a bar sleeve so a light load still reads as a tower. */
+const MIN_PIN = 220;
 
 /** Silhouettes drawn while calculating: a 45, a 35 and a 25. */
 const GHOST_WEIGHTS = [45, 35, 25];
@@ -88,9 +95,12 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
   const plates = status === 'ready' ? expand(perSide) : [];
   const ghosts = status === 'calculating' ? GHOST_WEIGHTS.map(sizeOf) : [];
   const single = bar.stacks === 1;
+  // Plate numbers run along the plate; the quarter turn of a single stack cancels
+  // the usual rotation, so they come out horizontal and upright either way.
+  const labelRotation = single ? 90 : -90;
 
   const loadWidth = Math.max(stackWidth(plates.map((plate) => sizeOf(plate.lbs))), stackWidth(ghosts));
-  const sleeve = Math.max(MIN_SLEEVE, loadWidth + SLEEVE_MARGIN);
+  const sleeve = Math.max(single ? MIN_PIN : MIN_SLEEVE, loadWidth + SLEEVE_MARGIN);
   const shaft = SHAFT_LENGTH[bar.id];
 
   // A two-sleeve bar is sleeve, collar, shaft, collar, sleeve. A single stack
@@ -131,7 +141,7 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
             x={centreX}
             y={CENTRE}
             fill={labelColor(item.color)}
-            transform={`rotate(-90 ${centreX} ${CENTRE})`}
+            transform={`rotate(${labelRotation} ${centreX} ${CENTRE})`}
             textAnchor="middle"
             dominantBaseline="central"
           >
@@ -159,15 +169,8 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
     <rect className="bar-collar" x={x} y={CENTRE - COLLAR_HEIGHT / 2} width={COLLAR_WIDTH} height={COLLAR_HEIGHT} rx={3} />
   );
 
-  return (
-    <svg
-      className={`barbell barbell-${bar.id} is-${status}`}
-      viewBox={`0 0 ${width} ${HEIGHT}`}
-      role="img"
-      aria-label={describe(bar, perSide, status)}
-      data-testid="barbell"
-      data-status={status}
-    >
+  const shapes = (
+    <>
       {single ? (
         <rect
           className="bar-hanger"
@@ -201,6 +204,19 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
       {renderPlates('right')}
       {!single && renderGhosts('left')}
       {renderGhosts('right')}
+    </>
+  );
+
+  return (
+    <svg
+      className={`barbell barbell-${bar.id} is-${status}`}
+      viewBox={single ? `0 0 ${HEIGHT} ${width}` : `0 0 ${width} ${HEIGHT}`}
+      role="img"
+      aria-label={describe(bar, perSide, status)}
+      data-testid="barbell"
+      data-status={status}
+    >
+      {single ? <g transform={`translate(0 ${width}) rotate(-90)`}>{shapes}</g> : shapes}
     </svg>
   );
 }

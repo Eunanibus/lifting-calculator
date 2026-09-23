@@ -20,8 +20,8 @@ Clear bar clears the number and the bar but keeps the settings.
 Pick the bar under the sentence.
 
 - Barbell (45 lb) and curl bar (25 lb) load plates on both sleeves, so the key counts plates per side.
-- Slinger plate is the single loading pin on a cable machine, for lat pulldowns.
-  It weighs nothing and takes one stack of plates, so the key counts plates once.
+- Slinger plate (shown as Stacked) is the single loading pin on a cable machine, for lat pulldowns.
+  It weighs nothing and takes one vertical stack of plates, heaviest at the bottom, so the key counts plates once.
 
 ## Plates
 

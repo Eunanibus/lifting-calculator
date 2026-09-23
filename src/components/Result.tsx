@@ -15,7 +15,7 @@ export default function Result({ result }: ResultProps) {
           <span className="badge-title">{includeBar || bar.stacks === 1 ? bar.name : 'Bar'}</span>
           <span className="badge-value">
             {bar.stacks === 1 ? (
-              'single stack'
+              'Stacked'
             ) : includeBar ? (
               <>
                 <span className="badge-lb">{formatWeight(bar.lbs)} lb</span>{' '}

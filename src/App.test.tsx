@@ -81,7 +81,7 @@ describe("App", () => {
 
   it("switches bars from the picker on the page and persists the choice", () => {
     render(<App />);
-    fireEvent.click(screen.getByRole("radio", { name: "Slinger plate single stack" }));
+    fireEvent.click(screen.getByRole("radio", { name: "Slinger plate Stacked" }));
     expect(screen.getByTestId("barbell")).toHaveClass("barbell-slinger");
     expect(JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? "{}")).toMatchObject({ bar: "slinger" });
 

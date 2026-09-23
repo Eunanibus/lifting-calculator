@@ -7,13 +7,13 @@ describe('BarPicker', () => {
     render(<BarPicker value="curl" onChange={() => {}} />);
     expect(screen.getByRole('radio', { name: 'Barbell 45 lb' })).not.toBeChecked();
     expect(screen.getByRole('radio', { name: 'Curl bar 25 lb' })).toBeChecked();
-    expect(screen.getByRole('radio', { name: 'Slinger plate single stack' })).not.toBeChecked();
+    expect(screen.getByRole('radio', { name: 'Slinger plate Stacked' })).not.toBeChecked();
   });
 
   it('reports the chosen bar', () => {
     const onChange = vi.fn();
     render(<BarPicker value="barbell" onChange={onChange} />);
-    fireEvent.click(screen.getByRole('radio', { name: 'Slinger plate single stack' }));
+    fireEvent.click(screen.getByRole('radio', { name: 'Slinger plate Stacked' }));
     expect(onChange).toHaveBeenCalledWith('slinger');
   });
 });
