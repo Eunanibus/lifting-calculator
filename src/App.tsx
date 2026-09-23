@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import Barbell from "./components/Barbell";
+import BarPicker from './components/BarPicker';
+import Barbell from './components/Barbell';
 import Hero from "./components/Hero";
 import Result, { ResultSkeleton } from "./components/Result";
 import SettingsDialog from "./components/SettingsDialog";
@@ -76,6 +77,8 @@ export default function App() {
         invalid={invalid}
         inputRef={inputRef}
       />
+
+      <BarPicker value={settings.bar} onChange={(id) => updateSettings({ ...settings, bar: id })} />
 
       <Barbell bar={bar} perSide={result?.perSide ?? []} status={status} />
 

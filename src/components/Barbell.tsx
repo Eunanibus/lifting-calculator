@@ -1,9 +1,9 @@
-import type { Bar, Plate, PlateCount } from "../lib/plates";
-import type { LoadStatus } from "../hooks/useLoadResult";
+import type { Bar, Plate, PlateCount } from '../lib/plates';
+import type { LoadStatus } from '../hooks/useLoadResult';
 
 type BarbellProps = { bar: Bar; perSide: PlateCount[]; status: LoadStatus };
 
-type Side = "left" | "right";
+type Side = 'left' | 'right';
 type PlateSize = { width: number; height: number };
 
 /** Drawing size per plate weight. Heavier plates are taller and thicker. */
@@ -27,7 +27,11 @@ const SLEEVE_HEIGHT = 24;
 const MIN_SLEEVE = 140;
 const PLATE_GAP = 2;
 const SLEEVE_MARGIN = 16;
-const SHAFT_LENGTH: Record<Bar["id"], number> = { barbell: 300, curl: 220 };
+const SHAFT_LENGTH: Record<Bar['id'], number> = { barbell: 300, curl: 220, slinger: 0 };
+
+/** The bracket a single-stack attachment hangs from, drawn left of its collar. */
+const HANGER_WIDTH = 34;
+const HANGER_HEIGHT = 64;
 
 /** Silhouettes drawn while calculating: a 45, a 35 and a 25. */
 const GHOST_WEIGHTS = [45, 35, 25];
@@ -37,9 +41,7 @@ function sizeOf(lbs: number): PlateSize {
 }
 
 function expand(perSide: PlateCount[]): Plate[] {
-  return perSide.flatMap(({ plate, count }) =>
-    Array.from({ length: count }, () => plate),
-  );
+  return perSide.flatMap(({ plate, count }) => Array.from({ length: count }, () => plate));
 }
 
 function stackWidth(sizes: PlateSize[]): number {
@@ -53,17 +55,16 @@ function labelColor(hex: string): string {
   const green = (value >> 8) & 255;
   const blue = value & 255;
   const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
-  return luminance > 0.6 ? "#1c1c1e" : "#ffffff";
+  return luminance > 0.6 ? '#1c1c1e' : '#ffffff';
 }
 
 /** An EZ curl shaft: straight ends around a W-shaped middle. */
 function curlPath(x: number, length: number): string {
-  const point = (fraction: number, dy: number) =>
-    `${(x + length * fraction).toFixed(1)},${CENTRE + dy}`;
+  const point = (fraction: number, dy: number) => `${(x + length * fraction).toFixed(1)},${CENTRE + dy}`;
   return [
-    "M",
+    'M',
     point(0, 0),
-    "L",
+    'L',
     point(0.18, 0),
     point(0.3, -18),
     point(0.42, 14),
@@ -71,92 +72,74 @@ function curlPath(x: number, length: number): string {
     point(0.7, -18),
     point(0.82, 0),
     point(1, 0),
-  ].join(" ");
+  ].join(' ');
 }
 
 function describe(bar: Bar, perSide: PlateCount[], status: LoadStatus): string {
-  if (status === "calculating") return "Loading plates";
-  if (status === "empty" || perSide.length === 0)
-    return `${bar.name} with no plates`;
-  const plates = perSide
-    .map(({ plate, count }) => `${count} × ${plate.lbs} lb`)
-    .join(", ");
-  return `${bar.name} with ${plates} per side`;
+  if (status === 'calculating') return 'Loading plates';
+  if (status === 'empty' || perSide.length === 0) return `${bar.name} with no plates`;
+  const plates = perSide.map(({ plate, count }) => `${count} × ${plate.lbs} lb`).join(', ');
+  return bar.stacks === 2 ? `${bar.name} with ${plates} per side` : `${bar.name} with ${plates}`;
 }
 
 type Placed<T> = { item: T; x: number; size: PlateSize; index: number };
 
 export default function Barbell({ bar, perSide, status }: BarbellProps) {
-  const plates = status === "ready" ? expand(perSide) : [];
-  const ghosts = status === "calculating" ? GHOST_WEIGHTS.map(sizeOf) : [];
+  const plates = status === 'ready' ? expand(perSide) : [];
+  const ghosts = status === 'calculating' ? GHOST_WEIGHTS.map(sizeOf) : [];
+  const single = bar.stacks === 1;
 
-  const loadWidth = Math.max(
-    stackWidth(plates.map((plate) => sizeOf(plate.lbs))),
-    stackWidth(ghosts),
-  );
+  const loadWidth = Math.max(stackWidth(plates.map((plate) => sizeOf(plate.lbs))), stackWidth(ghosts));
   const sleeve = Math.max(MIN_SLEEVE, loadWidth + SLEEVE_MARGIN);
   const shaft = SHAFT_LENGTH[bar.id];
-  const width = 2 * sleeve + 2 * COLLAR_WIDTH + shaft;
 
-  const leftCollarX = sleeve;
+  // A two-sleeve bar is sleeve, collar, shaft, collar, sleeve. A single stack
+  // is hanger, collar, sleeve, so its only collar doubles as the right one.
+  const leftCollarX = single ? HANGER_WIDTH : sleeve;
   const shaftX = leftCollarX + COLLAR_WIDTH;
-  const rightCollarX = shaftX + shaft;
+  const rightCollarX = single ? leftCollarX : shaftX + shaft;
   const rightSleeveX = rightCollarX + COLLAR_WIDTH;
+  const width = rightSleeveX + sleeve;
 
   /** Walks outward from the collar, so the first item sits against it. */
-  function place<T>(
-    items: T[],
-    sizeFor: (item: T) => PlateSize,
-    side: Side,
-  ): Placed<T>[] {
-    let cursor =
-      side === "right" ? rightSleeveX + PLATE_GAP : leftCollarX - PLATE_GAP;
+  function place<T>(items: T[], sizeFor: (item: T) => PlateSize, side: Side): Placed<T>[] {
+    let cursor = side === 'right' ? rightSleeveX + PLATE_GAP : leftCollarX - PLATE_GAP;
     return items.map((item, index) => {
       const size = sizeFor(item);
-      const x = side === "right" ? cursor : cursor - size.width;
-      cursor =
-        side === "right"
-          ? cursor + size.width + PLATE_GAP
-          : cursor - size.width - PLATE_GAP;
+      const x = side === 'right' ? cursor : cursor - size.width;
+      cursor = side === 'right' ? cursor + size.width + PLATE_GAP : cursor - size.width - PLATE_GAP;
       return { item, x, size, index };
     });
   }
 
   const renderPlates = (side: Side) =>
-    place(plates, (plate) => sizeOf(plate.lbs), side).map(
-      ({ item, x, size, index }) => {
-        const centreX = x + size.width / 2;
-        return (
-          <g
-            key={`${side}-${index}`}
-            data-testid="plate"
-            data-side={side}
-            data-lbs={item.lbs}
+    place(plates, (plate) => sizeOf(plate.lbs), side).map(({ item, x, size, index }) => {
+      const centreX = x + size.width / 2;
+      return (
+        <g key={`${side}-${index}`} data-testid="plate" data-side={side} data-lbs={item.lbs}>
+          <rect
+            className={`plate plate-${item.name}`}
+            x={x}
+            y={CENTRE - size.height / 2}
+            width={size.width}
+            height={size.height}
+            rx={3}
+            fill={item.color}
+          />
+          <text
+            className="plate-label"
+            x={centreX}
+            y={CENTRE}
+            fill={labelColor(item.color)}
+            transform={`rotate(-90 ${centreX} ${CENTRE})`}
+            textAnchor="middle"
+            dominantBaseline="central"
           >
-            <rect
-              className={`plate plate-${item.name}`}
-              x={x}
-              y={CENTRE - size.height / 2}
-              width={size.width}
-              height={size.height}
-              rx={3}
-              fill={item.color}
-            />
-            <text
-              className="plate-label"
-              x={centreX}
-              y={CENTRE}
-              fill={labelColor(item.color)}
-              transform={`rotate(-90 ${centreX} ${CENTRE})`}
-              textAnchor="middle"
-              dominantBaseline="central"
-            >
-              {item.lbs}
-            </text>
-          </g>
-        );
-      },
-    );
+            {item.lbs}
+          </text>
+        </g>
+      );
+    });
 
   const renderGhosts = (side: Side) =>
     place(ghosts, (size) => size, side).map(({ x, size, index }) => (
@@ -172,6 +155,10 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
       />
     ));
 
+  const collar = (x: number) => (
+    <rect className="bar-collar" x={x} y={CENTRE - COLLAR_HEIGHT / 2} width={COLLAR_WIDTH} height={COLLAR_HEIGHT} rx={3} />
+  );
+
   return (
     <svg
       className={`barbell barbell-${bar.id} is-${status}`}
@@ -181,14 +168,26 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
       data-testid="barbell"
       data-status={status}
     >
-      <rect
-        className="bar-sleeve"
-        x={0}
-        y={CENTRE - SLEEVE_HEIGHT / 2}
-        width={sleeve}
-        height={SLEEVE_HEIGHT}
-        rx={4}
-      />
+      {single ? (
+        <rect
+          className="bar-hanger"
+          x={0}
+          y={CENTRE - HANGER_HEIGHT / 2}
+          width={HANGER_WIDTH}
+          height={HANGER_HEIGHT}
+          rx={8}
+        />
+      ) : (
+        <>
+          <rect className="bar-sleeve" x={0} y={CENTRE - SLEEVE_HEIGHT / 2} width={sleeve} height={SLEEVE_HEIGHT} rx={4} />
+          {bar.id === 'curl' ? (
+            <path className="bar-shaft bar-shaft-curl" d={curlPath(shaftX, shaft)} />
+          ) : (
+            <rect className="bar-shaft" x={shaftX} y={CENTRE - SHAFT_HEIGHT / 2} width={shaft} height={SHAFT_HEIGHT} />
+          )}
+          {collar(leftCollarX)}
+        </>
+      )}
       <rect
         className="bar-sleeve"
         x={rightSleeveX}
@@ -197,40 +196,11 @@ export default function Barbell({ bar, perSide, status }: BarbellProps) {
         height={SLEEVE_HEIGHT}
         rx={4}
       />
-      {bar.id === "curl" ? (
-        <path
-          className="bar-shaft bar-shaft-curl"
-          d={curlPath(shaftX, shaft)}
-        />
-      ) : (
-        <rect
-          className="bar-shaft"
-          x={shaftX}
-          y={CENTRE - SHAFT_HEIGHT / 2}
-          width={shaft}
-          height={SHAFT_HEIGHT}
-        />
-      )}
-      <rect
-        className="bar-collar"
-        x={leftCollarX}
-        y={CENTRE - COLLAR_HEIGHT / 2}
-        width={COLLAR_WIDTH}
-        height={COLLAR_HEIGHT}
-        rx={3}
-      />
-      <rect
-        className="bar-collar"
-        x={rightCollarX}
-        y={CENTRE - COLLAR_HEIGHT / 2}
-        width={COLLAR_WIDTH}
-        height={COLLAR_HEIGHT}
-        rx={3}
-      />
-      {renderPlates("left")}
-      {renderPlates("right")}
-      {renderGhosts("left")}
-      {renderGhosts("right")}
+      {collar(rightCollarX)}
+      {!single && renderPlates('left')}
+      {renderPlates('right')}
+      {!single && renderGhosts('left')}
+      {renderGhosts('right')}
     </svg>
   );
 }

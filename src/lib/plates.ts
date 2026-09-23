@@ -1,8 +1,9 @@
 import { kgToLbs } from "./units";
 
 export type Plate = { lbs: number; color: string; name: string };
-export type BarId = "barbell" | "curl";
-export type Bar = { id: BarId; name: string; lbs: number };
+export type BarId = 'barbell' | 'curl' | 'slinger';
+/** stacks is 2 for a bar loaded on both sleeves, 1 for a single loading pin such as a slinger plate. */
+export type Bar = { id: BarId; name: string; lbs: number; stacks: 1 | 2 };
 export type Rounding = "over" | "under";
 export type PlateCount = { plate: Plate; count: number };
 export type SolveOptions = {
@@ -17,9 +18,9 @@ export type LoadResult = {
   bar: Bar;
   includeBar: boolean;
   rounding: Rounding;
-  /** Heaviest first. Never contains a zero count. */
+  /** One stack: a side of a two-sleeve bar, or the whole load of a single-stack attachment. Heaviest first, no zero counts. */
   perSide: PlateCount[];
-  /** Both sides together. */
+  /** Every stack together. */
   plateLbs: number;
   /** Plates plus the bar when the bar is included. */
   totalLbs: number;
@@ -45,8 +46,9 @@ export const PLATES: readonly Plate[] = [
 ];
 
 export const BARS: readonly Bar[] = [
-  { id: "barbell", name: "Barbell", lbs: 45 },
-  { id: "curl", name: "Curl bar", lbs: 25 },
+  { id: 'barbell', name: 'Barbell', lbs: 45, stacks: 2 },
+  { id: 'curl', name: 'Curl bar', lbs: 25, stacks: 2 },
+  { id: 'slinger', name: 'Slinger plate', lbs: 0, stacks: 1 },
 ];
 
 export function barById(id: BarId): Bar {
@@ -160,7 +162,7 @@ export function solve(targetKg: number, options: SolveOptions): LoadResult {
   const bar = barById(options.bar);
   const targetLbs = kgToLbs(targetKg);
   const barLbs = options.includeBar ? bar.lbs : 0;
-  const sideBudgetLbs = Math.max(0, targetLbs - barLbs) / 2;
+  const sideBudgetLbs = Math.max(0, targetLbs - barLbs) / bar.stacks;
 
   const toleranceUnits = TOLERANCE_LBS / UNIT_LBS;
   const rawBudgetUnits = sideBudgetLbs / UNIT_LBS;
@@ -177,7 +179,7 @@ export function solve(targetKg: number, options: SolveOptions): LoadResult {
   );
 
   const sideUnits = chooseSum(table, budgetUnits, options.rounding);
-  const plateLbs = sideUnits * UNIT_LBS * 2;
+  const plateLbs = sideUnits * UNIT_LBS * bar.stacks;
   const totalLbs = barLbs + plateLbs;
 
   return {

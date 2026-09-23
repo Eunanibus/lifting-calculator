@@ -51,6 +51,17 @@ describe('Result', () => {
     expect(barBadge.getByText('225 lb plates')).toBeInTheDocument();
   });
 
+  it('describes the slinger plate as a single stack with no per-side wording', () => {
+    render(<Result result={solve(50, { includeBar: true, rounding: 'under', bar: 'slinger' })} />);
+    expect(screen.getByText('110')).toBeInTheDocument();
+    const barBadge = within(screen.getByTestId('bar-badge'));
+    expect(barBadge.getByText('Slinger plate')).toBeInTheDocument();
+    expect(barBadge.getByText('single stack')).toBeInTheDocument();
+    expect(barBadge.getByText('110 lb plates')).toBeInTheDocument();
+    const rows = screen.getAllByRole('listitem');
+    expect(rows.map((row) => row.textContent)).toEqual(['45 lb× 2', '15 lb× 1', '5 lb× 1']);
+  });
+
   it('explains a bar that outweighs the target', () => {
     render(<Result result={solve(10, { includeBar: true, rounding: 'under', bar: 'barbell' })} />);
     expect(screen.getByText('The barbell alone is heavier than the target.')).toBeInTheDocument();

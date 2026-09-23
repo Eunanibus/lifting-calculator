@@ -12,9 +12,11 @@ export default function Result({ result }: ResultProps) {
     <section className="result">
       <div className="result-row">
         <div className="badge" data-testid="bar-badge">
-          <span className="badge-title">{includeBar ? bar.name : 'Bar'}</span>
+          <span className="badge-title">{includeBar || bar.stacks === 1 ? bar.name : 'Bar'}</span>
           <span className="badge-value">
-            {includeBar ? (
+            {bar.stacks === 1 ? (
+              'single stack'
+            ) : includeBar ? (
               <>
                 <span className="badge-lb">{formatWeight(bar.lbs)} lb</span>{' '}
                 <span className="badge-kg">({formatWeight(lbsToKg(bar.lbs))} kg)</span>
@@ -62,7 +64,10 @@ export default function Result({ result }: ResultProps) {
                 aria-hidden="true"
               />
               <span className="key-weight">{plate.lbs} lb</span>
-              <span className="key-count">× {count} per side</span>
+              <span className="key-count">
+                × {count}
+                {bar.stacks === 2 && ' per side'}
+              </span>
             </li>
           ))}
         </ul>

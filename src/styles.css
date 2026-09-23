@@ -63,7 +63,7 @@ input {
   padding: 2rem 1rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
   min-height: 100dvh;
 }
 
@@ -183,6 +183,16 @@ input {
   font-size: 0.95rem;
 }
 
+/* Bar picker */
+
+.bar-picker {
+  width: min(100%, 30rem);
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+}
+
 /* Barbell */
 
 /* The bar breaks out of the text column so it can span most of the page. */
@@ -193,7 +203,7 @@ input {
   transform: translateX(-50%);
   width: clamp(min(100vw - 2rem, 40rem), 75vw, 64rem);
   height: auto;
-  max-height: 34vh;
+  max-height: 30vh;
   margin: 0;
   overflow: visible;
 }
@@ -215,6 +225,10 @@ input {
 }
 
 .bar-collar {
+  fill: var(--collar);
+}
+
+.bar-hanger {
   fill: var(--collar);
 }
 

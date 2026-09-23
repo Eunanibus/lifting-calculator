@@ -16,9 +16,10 @@ describe('inventory', () => {
   });
 
   it('has a 45 lb barbell and a 25 lb curl bar', () => {
-    expect(BARS.map((b) => [b.id, b.lbs])).toEqual([
-      ['barbell', 45],
-      ['curl', 25],
+    expect(BARS.map((b) => [b.id, b.lbs, b.stacks])).toEqual([
+      ['barbell', 45, 2],
+      ['curl', 25, 2],
+      ['slinger', 0, 1],
     ]);
     expect(barById('curl').name).toBe('Curl bar');
   });
@@ -91,6 +92,30 @@ describe('solve', () => {
     expect(side(result)).toEqual([
       [45, 2],
       [10, 1],
+    ]);
+  });
+
+  it('the slinger plate loads one stack with no bar weight: 50 kg closest over is 112.5 lb', () => {
+    const result = solve(50, { ...base, bar: 'slinger' });
+    expect(result.bar.stacks).toBe(1);
+    expect(result.totalLbs).toBe(112.5);
+    expect(result.plateLbs).toBe(112.5);
+    expect(side(result)).toEqual([
+      [45, 2],
+      [15, 1],
+      [5, 1],
+      [2.5, 1],
+    ]);
+    expect(result.barExceedsTarget).toBe(false);
+  });
+
+  it('the slinger plate, 50 kg closest under, is 110 lb as 45 + 45 + 15 + 5', () => {
+    const result = solve(50, { ...base, bar: 'slinger', rounding: 'under' });
+    expect(result.totalLbs).toBe(110);
+    expect(side(result)).toEqual([
+      [45, 2],
+      [15, 1],
+      [5, 1],
     ]);
   });
 

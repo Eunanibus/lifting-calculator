@@ -101,6 +101,17 @@ describe("Barbell", () => {
     expect(screen.getByTestId("barbell")).toHaveClass("barbell-curl");
   });
 
+  it("draws the slinger plate as one stack on a single peg", () => {
+    render(<Barbell bar={barById("slinger")} perSide={load} status="ready" />);
+    expect(screen.getByTestId("barbell")).toHaveClass("barbell-slinger");
+    expect(document.querySelector(".bar-hanger")).not.toBeNull();
+    expect(document.querySelector(".bar-shaft")).toBeNull();
+    expect(sideLbs("right")).toEqual([45, 45, 25]);
+    expect(sideLbs("left")).toEqual([]);
+    expect(screen.getAllByTestId("plate")).toHaveLength(3);
+    expect(screen.getByRole("img")).toHaveAccessibleName("Slinger plate with 2 × 45 lb, 1 × 25 lb");
+  });
+
   it("widens the drawing when the load outgrows the sleeve", () => {
     const { rerender } = render(
       <Barbell bar={barById("barbell")} perSide={load} status="ready" />,

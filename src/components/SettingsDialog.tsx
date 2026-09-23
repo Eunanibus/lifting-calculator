@@ -1,6 +1,5 @@
-import { useEffect, useRef } from "react";
-import { BARS } from "../lib/plates";
-import type { Settings } from "../lib/settings";
+import { useEffect, useRef } from 'react';
+import type { Settings } from '../lib/settings';
 
 type SettingsDialogProps = {
   open: boolean;
@@ -10,8 +9,8 @@ type SettingsDialogProps = {
 };
 
 const ROUNDINGS = [
-  { value: "over", label: "Closest over" },
-  { value: "under", label: "Closest under" },
+  { value: 'over', label: 'Closest over' },
+  { value: 'under', label: 'Closest under' },
 ] as const;
 
 const THEMES = [
@@ -19,18 +18,13 @@ const THEMES = [
   { value: 'light', label: 'Light' },
 ] as const;
 
-export default function SettingsDialog({
-  open,
-  settings,
-  onChange,
-  onClose,
-}: SettingsDialogProps) {
+export default function SettingsDialog({ open, settings, onChange, onClose }: SettingsDialogProps) {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return;
-    const isOpen = dialog.hasAttribute("open");
+    const isOpen = dialog.hasAttribute('open');
     if (open && !isOpen) dialog.showModal();
     if (!open && isOpen) dialog.close();
   }, [open]);
@@ -40,12 +34,11 @@ export default function SettingsDialog({
   useEffect(() => {
     const dialog = ref.current;
     if (!dialog) return undefined;
-    dialog.addEventListener("close", onClose);
-    return () => dialog.removeEventListener("close", onClose);
+    dialog.addEventListener('close', onClose);
+    return () => dialog.removeEventListener('close', onClose);
   }, [onClose]);
 
-  const update = (patch: Partial<Settings>) =>
-    onChange({ ...settings, ...patch });
+  const update = (patch: Partial<Settings>) => onChange({ ...settings, ...patch });
 
   return (
     <dialog
@@ -63,7 +56,9 @@ export default function SettingsDialog({
         </h2>
 
         <div className="setting">
-          <label className="setting-label" htmlFor="include-bar">Include bar weight</label>
+          <label className="setting-label" htmlFor="include-bar">
+            Include bar weight
+          </label>
           <button
             type="button"
             role="switch"
@@ -95,26 +90,6 @@ export default function SettingsDialog({
         </fieldset>
 
         <fieldset className="setting setting-stacked">
-          <legend className="setting-label">Bar</legend>
-          <div className="segmented">
-            {BARS.map((bar) => (
-              <label key={bar.id} className="segment">
-                <input
-                  type="radio"
-                  name="bar"
-                  value={bar.id}
-                  checked={settings.bar === bar.id}
-                  onChange={() => update({ bar: bar.id })}
-                />
-                <span>
-                  {bar.name} <small>{bar.lbs} lb</small>
-                </span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-
-        <fieldset className="setting setting-stacked">
           <legend className="setting-label">Theme</legend>
           <div className="segmented">
             {THEMES.map(({ value, label }) => (
@@ -132,11 +107,8 @@ export default function SettingsDialog({
           </div>
         </fieldset>
 
-        <button
-          type="button"
-          className="button settings-done"
-          onClick={onClose}
-        >
+        {/* Done only reports; the caller drives the open prop, and the effect above closes the element. */}
+        <button type="button" className="button settings-done" onClick={onClose}>
           Done
         </button>
       </div>

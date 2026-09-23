@@ -79,6 +79,19 @@ describe("App", () => {
     ).toMatchObject({ rounding: "under" });
   });
 
+  it("switches bars from the picker on the page and persists the choice", () => {
+    render(<App />);
+    fireEvent.click(screen.getByRole("radio", { name: "Slinger plate single stack" }));
+    expect(screen.getByTestId("barbell")).toHaveClass("barbell-slinger");
+    expect(JSON.parse(window.localStorage.getItem(SETTINGS_KEY) ?? "{}")).toMatchObject({ bar: "slinger" });
+
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "50" } });
+    settle();
+    expect(screen.getByText("112.5")).toBeInTheDocument();
+    expect(screen.getByText("× 2")).toBeInTheDocument();
+    expect(screen.queryByText(/per side/)).not.toBeInTheDocument();
+  });
+
   it("starts from saved settings", () => {
     window.localStorage.setItem(
       SETTINGS_KEY,

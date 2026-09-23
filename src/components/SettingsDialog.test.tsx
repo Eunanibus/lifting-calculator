@@ -50,10 +50,6 @@ describe("SettingsDialog", () => {
     expect(
       screen.getByRole("radio", { name: "Closest under" }),
     ).not.toBeChecked();
-    expect(screen.getByRole("radio", { name: "Barbell 45 lb" })).toBeChecked();
-    expect(
-      screen.getByRole("radio", { name: "Curl bar 25 lb" }),
-    ).not.toBeChecked();
     expect(screen.getByRole('radio', { name: 'Dark' })).toBeChecked();
     expect(screen.getByRole('radio', { name: 'Light' })).not.toBeChecked();
   });
@@ -82,12 +78,6 @@ describe("SettingsDialog", () => {
     expect(onChange).toHaveBeenLastCalledWith({
       ...DEFAULT_SETTINGS,
       rounding: "under",
-    });
-
-    fireEvent.click(screen.getByRole("radio", { name: "Curl bar 25 lb" }));
-    expect(onChange).toHaveBeenLastCalledWith({
-      ...DEFAULT_SETTINGS,
-      bar: "curl",
     });
 
     fireEvent.click(screen.getByRole('radio', { name: 'Light' }));
